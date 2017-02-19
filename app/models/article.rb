@@ -5,4 +5,5 @@ class Article < ApplicationRecord
 
   default_scope { order(created_at: :desc) }  # can also add to the index - .order('created_at DESC')
 
+  belongs_to :user
 end

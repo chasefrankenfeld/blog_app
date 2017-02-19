@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 RSpec.feature "Creating Articles" do
+  before do
+    @john = User.create!(email: "john@example.com", password: "password")
+    login_as(@john)  # This is a method provided by Warden through devise to login
+    ## Therefore need to include - include Warden::Test::Helpers into the rails_helper.rb file
+  end
+
   scenario "A user creates a new article" do
     visit "/"  # "/" means visit root
 
@@ -12,8 +18,10 @@ RSpec.feature "Creating Articles" do
     click_button "Create Article"
 
     # the are expectation of what we want to happen
+    expect(Article.last.user).to eq(@john)
     expect(page).to have_content("Article has been created")
     expect(page.current_path).to eq(articles_path)
+    expect(page).to have_content("Created by: #{@john.email}")
   end
 
   scenario "A user fails to create a new article" do
