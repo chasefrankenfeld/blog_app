@@ -7,7 +7,9 @@ require 'rails_helper'
 RSpec.feature "Show Article" do
 
   before do
-    @article = Article.create(title: "The first article", body: "Body of first article")
+    john  = User.create(email: "john@example.com", password: "password", password_confirmation: "password")
+    login_as(john)
+    @article = Article.create(title: "Title One", body: "Body of article one", user: john)
   end
 
   scenario "Displaying the show page for an article" do
