@@ -10,6 +10,8 @@ class CommentsController < ApplicationController
       @comment = @article.comments.build(comment_params)
       @comment.user = current_user
       if @comment.save
+        ActionCable.server.broadcast "comments",  # ths broadcasts what has been saved to all users
+          render(partial: "comments/comment", object: @comment)  # the object specifies what we want to show from the comments partial
         flash[:notice] = "Comment has been created."
       else
         flash.now[:alert] = "Comment has not been created."
